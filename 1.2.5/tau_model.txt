@@ -1,0 +1,36 @@
+The merit of BoltzTraP is that it can get the thermopower without the relaxation time (tau) [ http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg05038.html ], 
+but this is under the assumption that tau acts as an 'arbitrary' constant [ http://arxiv.org/abs/cond-mat/0602203v1 ].
+
+The code can also give the electrical conductivity per relaxation time (sigma/tau).  However, if a calculated electrical conductivity (sigma) is wanted, then an experimental tau or calculated tau is needed [ https://sites.google.com/site/cta4rbk/home/tips4vasp ].  It is believed that the experimental tau is more commonly used.
+
+It seems that the latest version, BoltzTraP V1.2.5, might be able to estimate tau given the right input.
+
+In the BoltzTraP V1.2.5 package (BoltzTraP.tar.bz2) [ http://www.icams.de/content/departments/cmat/boltztrap/ ], the following line can be seen in Table 1.1 of doc/UserGuide.pdf:
+
+0 0 0 0 0 tau-model. Not documented
+
+In the code (src/boseintegrals.F90), it appears that 'tau' might be the variable 'lifetime' in BoltzTraP.
+
+It can be determined from the documented code (src/m_input.F90) that the description of the parameters for the Table 1.1 line should be:
+
+1 0 0 0 -1 #tau-model: tauref tauexp taurefen tempexp taureftemp
+
+As seen in the line above, the default values if the line is not given in case.intrans is:
+
+tauref = 1
+tauexp = 0
+taurefen = 0
+tempexp = 0 <= This value is not currently initialized with the other parameters, so it might be uninitialized if the compiler does not set it 0.
+taureftemp = -1
+
+From the equation in the article Okuda et al. PRB 63 113104 (2001), it can be seen that tau can be calculated if tauref, the energy (ene), and tauexp are known.
+
+tauref is the reference lifetime tau0 (femtoseconds) [src/fermiintegrals.F90] <= Not sure why tauref in src/boseintegrals.F90 uses picoseconds
+tauexp is the scattering parameter r (unitless) <= For r values, see Durczewski et al. PRB 61 5303 (2000)
+taurefen is the reference energy (Ry), e.g. Fermi level, at which tauref is given
+tempexp is the exponent for the temperature dependence (unitless) <= see Table II of Asen-Palmer et al. PRB 56 9431 (1997)
+        -4 -> isotope effects phonon
+        -3 or -4 -> normal phonon
+taureftemp is the reference temperature (K) for the given tauref
+
+Reference: http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg12555.html
