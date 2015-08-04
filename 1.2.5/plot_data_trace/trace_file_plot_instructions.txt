@@ -1,0 +1,21 @@
+An example of how to make a 3D plot of the BoltzTraP trace file data using gnuplot is given below.
+
+The chemical potential (Ef) vs temperature (T) vs Seebeck coefficient (S) can be plotted as follows.
+
+This example uses Bi2Te3.trace, which comes with BoltzTraP 1.2.5 (in path-to-BoltzTraP/tests/Bi2Te3).
+
+In a Linux terminal:
+
+username@computername:~/plot_data_trace$ cp ~/boltztrap-1.2.5/tests/Bi2Te3/Bi2Te3.trace data.trace
+username@computername:~/plot_data_trace$ ls
+addblanks.awk  data.trace  trace_file_plot_instructions.txt
+username@computername:~/plot_data_trace$ gnuplot
+gnuplot> set xlabel "Ef [Ry]"; set ylabel "T [K]"; set zlabel "S"; splot "<awk -f addblanks.awk data.trace" using 1:2:5 with lines
+gnuplot> exit
+
+"EfversusTversusS.jpg" - a screenshot of the resulting gnuplot of Bi2Te3.trace
+addblanks.awk - an awk script that helps format the data (adds blank lines) for gnuplot [ http://stackoverflow.com/questions/11928194/gnuplot-connects-endpoint-of-data ] 
+
+using 1:2:5 - uses column 1, column 2, and column 5, respectively, in the data.trace file
+
+Reference: http://www.mail-archive.com/wien%40zeus.theochem.tuwien.ac.at/msg10961.html
