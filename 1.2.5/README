@@ -1,0 +1,9 @@
+Patches for BoltzTraP 1.2.5
+
+- Place gather_energy.patch into path-to-BoltzTraP/util
+- Apply the patch with: patch -b gather_energy.pl gather_energy.patch
+Description: Modifies gather_energy.pl so that it should work for parallel spin polarized and parallel spin orbit calculations.
+Reference: http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg12285.html
+
+- tau_model.txt
+- Description: Documentation for the tau model
