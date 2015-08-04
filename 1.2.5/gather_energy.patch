@@ -1,0 +1,25 @@
+5c5
+< my ($pip,$pip2,$i,$j,$name,$nat,$enetest);
+---
+> my ($pip,$pip2,$i,$j,$name,$nat,$enetest,$updn);
+7c7
+< die "Usage: gather_energy.pl [case] \n" if $#ARGV < 0;
+---
+> die "Usage: gather_energy [case] [-up/-dn] \n" if $#ARGV < 0;
+8a9,14
+> $updn = '';
+> 
+> if($#ARGV == 1){
+> $updn = $ARGV[1];
+> $updn =~ s/-//gi; #Removes dash (-) in front of up or dn
+> }
+17c23
+<     system("cat $name.energyso_? $name.energyso_?? > pip") ;
+---
+>     system("cat $name.energyso${updn}_? $name.energyso${updn}_?? > pip") ;
+20,21c26,27
+<     system("cat $name.energy_? $name.energy_?? > pip") ;
+<     open(ENE,">$name.energy");
+---
+>     system("cat $name.energy${updn}_? $name.energy${updn}_?? > pip") ;
+>     open(ENE,">$name.energy${updn}");
